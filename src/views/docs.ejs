@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <%- include('partials/head', { title: 'Documentation API' }) %>
+  </head>
+  <body class="page">
+    <main class="container">
+      <section class="card">
+        <h1>Documentation API</h1>
+        <p>Toutes les routes nécessitent une authentification sauf <code>/</code>, <code>/login</code> et <code>/docs</code>.</p>
+
+        <h2>Authentification</h2>
+        <ul>
+          <li><code>POST /login</code> corps : <code>{ email, password }</code></li>
+          <li><code>GET /logout</code></li>
+        </ul>
+
+        <h2>Utilisateurs</h2>
+        <ul>
+          <li><code>GET /users</code></li>
+          <li><code>GET /users/:email</code></li>
+          <li><code>POST /users</code></li>
+          <li><code>PUT /users/:email</code></li>
+          <li><code>DELETE /users/:email</code></li>
+        </ul>
+
+        <h2>Catways</h2>
+        <ul>
+          <li><code>GET /catways</code></li>
+          <li><code>GET /catways/:id</code></li>
+          <li><code>POST /catways</code></li>
+          <li><code>PUT /catways/:id</code> (met à jour uniquement <code>catwayState</code>)</li>
+          <li><code>DELETE /catways/:id</code></li>
+        </ul>
+
+        <h2>Réservations</h2>
+        <ul>
+          <li><code>GET /reservations</code></li>
+          <li><code>GET /catways/:id/reservations</code></li>
+          <li><code>GET /catways/:id/reservations/:idReservation</code></li>
+          <li><code>POST /catways/:id/reservations</code></li>
+          <li><code>PUT /catways/:id/reservations/:idReservation</code></li>
+          <li><code>PUT /catways/:id/reservations</code> (nécessite <code>reservationId</code> dans le corps)</li>
+          <li><code>DELETE /catways/:id/reservations/:idReservation</code></li>
+        </ul>
+
+        <div class="links">
+          <a href="/">Retour à l'accueil</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

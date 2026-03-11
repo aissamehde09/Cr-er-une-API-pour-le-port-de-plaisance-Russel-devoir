@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <%- include('partials/head', { title: title || 'Erreur' }) %>
+  </head>
+  <body class="page">
+    <main class="container">
+      <section class="card">
+        <h1><%= title || 'Erreur' %></h1>
+        <% if (errors && errors.length) { %>
+          <ul>
+            <% errors.forEach((err) => { %>
+              <li><strong><%= err.field %></strong>: <%= err.message %></li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p>Erreur inattendue.</p>
+        <% } %>
+        <div class="links">
+          <a href="/ui/dashboard">Retour au tableau de bord</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

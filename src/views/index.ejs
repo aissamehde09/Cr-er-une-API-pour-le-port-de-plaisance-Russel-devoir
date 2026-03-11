@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <%- include('partials/head', { title: 'Accueil' }) %>
+  </head>
+  <body class="page">
+    <main class="container">
+      <section class="card">
+        <h1>Russell Marina</h1>
+        <p class="lead">
+          API privée et tableau de bord pour les réservations de passerelles et les opérations portuaires.
+        </p>
+
+        <% if (error) { %>
+          <div class="alert"><%= error %></div>
+        <% } %>
+
+        <form class="form" method="post" action="/login">
+          <label>
+            E-mail
+            <input type="email" name="email" required>
+          </label>
+          <label>
+            Mot de passe
+            <input type="password" name="password" required>
+          </label>
+          <button type="submit">Se connecter</button>
+        </form>
+
+        <div class="links">
+          <a href="/docs">Documentation API</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

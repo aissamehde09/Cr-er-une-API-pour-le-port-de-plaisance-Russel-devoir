@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <%- include('partials/head', { title: 'Catways' }) %>
+  </head>
+  <body>
+    <%- include('partials/nav', { user }) %>
+    <main class="container">
+      <section class="card">
+        <h1>Catways</h1>
+        <form class="form form-inline" method="post" action="/catways" data-catway-create>
+          <label>
+            Numéro
+            <input type="number" name="catwayNumber" min="1" required>
+          </label>
+          <label>
+            Type
+            <select name="catwayType" required>
+              <option value="short">short</option>
+              <option value="long">long</option>
+            </select>
+          </label>
+          <label class="grow">
+            État
+            <input type="text" name="catwayState" required>
+          </label>
+          <button type="submit">Créer</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Catways existants</h2>
+        <p class="meta" data-catways-empty <%= catways.length ? 'hidden' : '' %>>
+          Aucun catway pour le moment.
+        </p>
+        <table data-catways-table <%= catways.length ? '' : 'hidden' %>>
+          <thead>
+            <tr>
+              <th>Numéro</th>
+              <th>Type</th>
+              <th>État</th>
+              <th>Mettre à jour l’état</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% catways.forEach((c) => { %>
+              <tr data-catway-row="<%= c.catwayNumber %>">
+                <td><%= c.catwayNumber %></td>
+                <td><%= c.catwayType %></td>
+                <td data-catway-state="<%= c.catwayNumber %>"><%= c.catwayState %></td>
+                <td>
+                  <form
+                    class="form form-inline"
+                    method="post"
+                    action="/catways/<%= c.catwayNumber %>"
+                    data-catway-update
+                    data-catway-number="<%= c.catwayNumber %>"
+                  >
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="text" name="catwayState" value="<%= c.catwayState %>" required>
+                    <button type="submit">Enregistrer</button>
+                  </form>
+                </td>
+                <td>
+                  <form
+                    method="post"
+                    action="/catways/<%= c.catwayNumber %>"
+                    data-catway-delete
+                    data-catway-number="<%= c.catwayNumber %>"
+                  >
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="danger" type="submit">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <%- include('partials/footer') %>
+    <script src="/catways.js" defer></script>
+  </body>
+</html>

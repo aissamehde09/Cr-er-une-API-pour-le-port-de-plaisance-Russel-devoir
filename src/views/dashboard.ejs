@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <%- include('partials/head', { title: 'Tableau de bord' }) %>
+  </head>
+  <body>
+    <%- include('partials/nav', { user }) %>
+    <main class="container">
+      <section class="card">
+        <h1>Tableau de bord</h1>
+        <p class="meta">
+          Connecté en tant que <strong><%= user.username %></strong> (<%= user.email %>)
+        </p>
+        <p class="meta">Date : <%= today %></p>
+      </section>
+
+      <section class="card">
+        <h2>Réservations en cours</h2>
+        <% const formatDate = (d) => new Date(d).toISOString().slice(0, 10); %>
+        <% if (currentReservations.length === 0) { %>
+          <p>Aucune réservation en cours.</p>
+        <% } else { %>
+          <table>
+            <thead>
+              <tr>
+                <th>Catway</th>
+                <th>Client</th>
+                <th>Bateau</th>
+                <th>Début</th>
+                <th>Fin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% currentReservations.forEach((r) => { %>
+                <tr>
+                  <td><%= r.catwayNumber %></td>
+                  <td><%= r.clientName %></td>
+                  <td><%= r.boatName %></td>
+                  <td><%= formatDate(r.startDate) %></td>
+                  <td><%= formatDate(r.endDate) %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+    </main>
+    <%- include('partials/footer') %>
+  </body>
+</html>

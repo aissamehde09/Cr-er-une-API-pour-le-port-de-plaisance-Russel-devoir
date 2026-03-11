@@ -1,0 +1,32 @@
+<nav class="nav">
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+    <span class="sr-only">Ouvrir le menu</span>
+    <span class="nav-toggle-bar"></span>
+    <span class="nav-toggle-bar"></span>
+    <span class="nav-toggle-bar"></span>
+  </button>
+  <div id="nav-menu" class="nav-menu">
+    <div class="nav-left">
+      <a href="/ui/dashboard">Tableau de bord</a>
+      <a href="/ui/catways">Catways</a>
+      <a href="/ui/reservations">Réservations</a>
+      <a href="/ui/users">Utilisateurs</a>
+      <a href="/docs">Documentation API</a>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user"><%= user ? user.username : '' %></span>
+      <a href="/logout">Déconnexion</a>
+    </div>
+  </div>
+</nav>
+<script>
+  (() => {
+    const nav = document.querySelector('.nav');
+    const toggle = document.querySelector('.nav-toggle');
+    if (!nav || !toggle) return;
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  })();
+</script>

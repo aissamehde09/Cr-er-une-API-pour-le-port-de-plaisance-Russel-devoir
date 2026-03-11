@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <%- include('partials/head', { title: 'Réservations' }) %>
+  </head>
+  <body>
+    <%- include('partials/nav', { user }) %>
+    <main class="container">
+      <section class="card">
+        <h1>Réservations</h1>
+        <form id="createReservationForm" class="form form-inline" method="post" action="/catways/0/reservations">
+          <label>
+            Catway
+            <select name="catwayNumber" required>
+              <% catways.forEach((c, index) => { %>
+                <option value="<%= c.catwayNumber %>" <%= index === 0 ? 'selected' : '' %>>
+                  <%= c.catwayNumber %> (<%= c.catwayType %>)
+                </option>
+              <% }) %>
+            </select>
+          </label>
+          <label>
+            Client
+            <input type="text" name="clientName" required>
+          </label>
+          <label>
+            Bateau
+            <input type="text" name="boatName" required>
+          </label>
+          <label>
+            Début
+            <input type="date" name="startDate" required>
+          </label>
+          <label>
+            Fin
+            <input type="date" name="endDate" required>
+          </label>
+          <button type="submit">Créer</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Toutes les réservations</h2>
+        <% const formatDate = (d) => new Date(d).toISOString().slice(0, 10); %>
+        <p class="meta" data-reservations-empty <%= reservations.length ? 'hidden' : '' %>>
+          Aucune réservation pour le moment.
+        </p>
+        <table data-reservations-table <%= reservations.length ? '' : 'hidden' %>>
+          <thead>
+            <tr>
+              <th>Catway</th>
+              <th>Client</th>
+              <th>Bateau</th>
+              <th>Début</th>
+              <th>Fin</th>
+              <th>Mettre à jour</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% reservations.forEach((r) => { %>
+              <tr data-reservation-row="<%= r._id %>">
+                <td data-reservation-catway="<%= r._id %>"><%= r.catwayNumber %></td>
+                <td data-reservation-client="<%= r._id %>"><%= r.clientName %></td>
+                <td data-reservation-boat="<%= r._id %>"><%= r.boatName %></td>
+                <td data-reservation-start="<%= r._id %>"><%= formatDate(r.startDate) %></td>
+                <td data-reservation-end="<%= r._id %>"><%= formatDate(r.endDate) %></td>
+                <td>
+                  <form
+                    class="form form-inline"
+                    method="post"
+                    action="/catways/<%= r.catwayNumber %>/reservations/<%= r._id %>"
+                    data-reservation-update
+                    data-reservation-id="<%= r._id %>"
+                  >
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="text" name="clientName" value="<%= r.clientName %>">
+                    <input type="text" name="boatName" value="<%= r.boatName %>">
+                    <input type="date" name="startDate" value="<%= formatDate(r.startDate) %>">
+                    <input type="date" name="endDate" value="<%= formatDate(r.endDate) %>">
+                    <button type="submit">Enregistrer</button>
+                  </form>
+                </td>
+                <td>
+                  <form
+                    method="post"
+                    action="/catways/<%= r.catwayNumber %>/reservations/<%= r._id %>"
+                    data-reservation-delete
+                    data-reservation-id="<%= r._id %>"
+                  >
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="danger" type="submit">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <%- include('partials/footer') %>
+    <script>
+      const createForm = document.getElementById('createReservationForm');
+      createForm.addEventListener('submit', () => {
+        const catwayNumber = createForm.elements.catwayNumber.value;
+        createForm.action = `/catways/${catwayNumber}/reservations`;
+      });
+    </script>
+    <script src="/reservations.js" defer></script>
+  </body>
+</html>

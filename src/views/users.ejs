@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <%- include('partials/head', { title: 'Utilisateurs' }) %>
+  </head>
+  <body>
+    <%- include('partials/nav', { user }) %>
+    <main class="container">
+      <section class="card">
+        <h1>Utilisateurs</h1>
+        <form class="form form-inline" method="post" action="/users">
+          <label>
+            Nom d'utilisateur
+            <input type="text" name="username" required>
+          </label>
+          <label>
+            E-mail
+            <input type="email" name="email" required>
+          </label>
+          <label>
+            Mot de passe
+            <input type="password" name="password" required>
+          </label>
+          <button type="submit">Créer</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Utilisateurs existants</h2>
+        <p class="meta" data-users-empty <%= users.length ? 'hidden' : '' %>>
+          Aucun utilisateur pour le moment.
+        </p>
+        <table data-users-table <%= users.length ? '' : 'hidden' %>>
+          <thead>
+            <tr>
+              <th>Nom d'utilisateur</th>
+              <th>E-mail</th>
+              <th>Mettre à jour</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach((u) => { %>
+              <tr data-user-row="<%= u.email %>">
+                <td data-user-username="<%= u.email %>"><%= u.username %></td>
+                <td data-user-email="<%= u.email %>"><%= u.email %></td>
+                <td>
+                  <form
+                    class="form form-inline"
+                    method="post"
+                    action="/users/<%= encodeURIComponent(u.email) %>"
+                    data-user-update
+                    data-user-email="<%= u.email %>"
+                  >
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="text" name="username" value="<%= u.username %>">
+                    <input type="email" name="email" value="<%= u.email %>">
+                    <input type="password" name="password" placeholder="Nouveau mot de passe">
+                    <button type="submit">Enregistrer</button>
+                  </form>
+                </td>
+                <td>
+                  <form
+                    method="post"
+                    action="/users/<%= encodeURIComponent(u.email) %>"
+                    data-user-delete
+                    data-user-email="<%= u.email %>"
+                  >
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="danger" type="submit">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <%- include('partials/footer') %>
+    <script src="/users.js" defer></script>
+  </body>
+</html>
