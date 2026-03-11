@@ -72,12 +72,24 @@ mongoimport --jsonArray --db russell_marina --collection reservations --file dat
 
 ## UI
 
-- Accueil : `GET /`
+Acces rapide :
+- Accueil (login) : `GET /`
 - Tableau de bord : `GET /ui/dashboard`
-- CRUD catways : `GET /ui/catways`
-- CRUD reservations : `GET /ui/reservations`
-- CRUD utilisateurs : `GET /ui/users`
+- Gestion des catways : `GET /ui/catways`
+- Gestion des reservations : `GET /ui/reservations`
+- Gestion des utilisateurs : `GET /ui/users`
 - Docs API : `GET /docs`
+
+Parcours :
+- Se connecter avec l'email et le mot de passe admin defines dans `.env` (`ADMIN_EMAIL`, `ADMIN_PASSWORD`).
+- Creer/modifier/supprimer :
+  - catways (numero, type, etat)
+  - reservations (catway, client, bateau, dates)
+  - utilisateurs (username, email, password)
+
+Notes UI :
+- Les actions "creer / modifier / supprimer" sont faites sans rechargement (AJAX).
+- Si JavaScript est desactive, les formulaires fonctionnent quand meme via les routes classiques.
 
 ## API
 

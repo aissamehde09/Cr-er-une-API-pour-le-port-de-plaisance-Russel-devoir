@@ -66,12 +66,17 @@ app.use((req, res) => {
   return res.status(404).json({ error: 'Not Found' });
 });
 
-const port = process.env.PORT || 3000;
+const port = Number(process.env.PORT) || 3000;
+const host = process.env.HOST || '0.0.0.0';
 
 async function startServer() {
   await connectDb();
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  const server = app.listen(port, host, () => {
+    console.log(`Server running on http://${host}:${port}`);
+  });
+  server.on('error', (err) => {
+    console.error('Server failed to start:', err.message);
+    process.exit(1);
   });
 }
 
