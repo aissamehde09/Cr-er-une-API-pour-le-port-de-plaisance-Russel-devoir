@@ -1,3 +1,8 @@
+/**
+ * Ici on gère l'UI des catways (CRUD AJAX).
+ * @module public/catways
+ */
+
 (() => {
   const table = document.querySelector('[data-catways-table]');
   const emptyState = document.querySelector('[data-catways-empty]');
@@ -9,6 +14,10 @@
     return;
   }
 
+  /**
+   * Ça supprime une ligne de catway du tableau et bascule l'état vide.
+   * @param {string} catwayNumber
+   */
   const removeRow = (catwayNumber) => {
     const row = document.querySelector(`[data-catway-row="${catwayNumber}"]`);
     if (row) {
@@ -23,6 +32,10 @@
     }
   };
 
+  /**
+   * On branche le comportement de suppression à un formulaire catway.
+   * @param {HTMLFormElement} form
+   */
   const deleteFormsObserver = (form) => {
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -70,6 +83,10 @@
     });
   };
 
+  /**
+   * On branche le comportement de mise à jour à un formulaire catway.
+   * @param {HTMLFormElement} form
+   */
   const updateFormsObserver = (form) => {
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -142,6 +159,10 @@
     });
   };
 
+  /**
+   * On ajoute une nouvelle ligne au tableau des catways.
+   * @param {{catwayNumber: number, catwayType: string, catwayState: string}} catway
+   */
   const addCatwayRow = (catway) => {
     if (!table) {
       return;
@@ -276,3 +297,4 @@
     });
   }
 })();
+

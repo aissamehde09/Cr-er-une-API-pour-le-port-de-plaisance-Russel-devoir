@@ -1,3 +1,8 @@
+/**
+ * Ce fichier gère les routes d'authentification.
+ * @module routes/auth
+ */
+
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
@@ -5,6 +10,13 @@ const { issueToken, setAuthCookie } = require('../middleware/auth');
 
 const router = express.Router();
 
+/**
+ * Ça renvoie une erreur de connexion en HTML ou JSON.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {string} message
+ * @returns {import('express').Response}
+ */
 function loginError(req, res, message) {
   if (req.accepts('html')) {
     return res.status(401).render('index', { error: message });
@@ -18,6 +30,12 @@ router.post(
     body('email').isEmail().withMessage('Valid email required').normalizeEmail(),
     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 chars')
   ],
+  /**
+   * Ça authentifie un utilisateur et émet un token.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -47,6 +65,12 @@ router.post(
   }
 );
 
+/**
+ * Ça supprime le cookie d'authentification et déconnecte.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {import('express').Response}
+ */
 router.get('/logout', (req, res) => {
   res.clearCookie('token');
   if (req.accepts('html')) {
@@ -56,3 +80,4 @@ router.get('/logout', (req, res) => {
 });
 
 module.exports = router;
+

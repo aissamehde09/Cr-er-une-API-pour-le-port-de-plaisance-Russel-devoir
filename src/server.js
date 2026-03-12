@@ -1,3 +1,8 @@
+/**
+ * Démarrage de l'application API + UI Russell Marina.
+ * @module server
+ */
+
 require('dotenv').config();
 
 const path = require('path');
@@ -16,6 +21,7 @@ const docsRoutes = require('./routes/docs');
 const uiRoutes = require('./routes/ui');
 const { authRequired, authOptional } = require('./middleware/auth');
 
+/** @type {import('express').Express} */
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -28,6 +34,11 @@ app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+/**
+ * Petit endpoint pour vérifier que l'app répond (health check) pour Railway et la supervision.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 app.get('/health', (req, res) => {
   const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
   const state = states[mongoose.connection.readyState] || 'unknown';
@@ -42,6 +53,11 @@ app.get('/health', (req, res) => {
   });
 });
 
+/**
+ * Ici on affiche la page d'accueil publique (formulaire de connexion).
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 app.get('/', authOptional, (req, res) => {
   if (req.user) {
     return res.redirect('/ui/dashboard');
@@ -69,6 +85,10 @@ app.use((req, res) => {
 const port = Number(process.env.PORT) || 3000;
 const host = process.env.HOST || '0.0.0.0';
 
+/**
+ * Ça sert à se connecter à MongoDB et démarre le serveur HTTP.
+ * @returns {Promise<void>}
+ */
 async function startServer() {
   await connectDb();
   const server = app.listen(port, host, () => {
@@ -84,3 +104,4 @@ startServer().catch((err) => {
   console.error('Failed to start server:', err.message);
   process.exit(1);
 });
+

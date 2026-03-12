@@ -1,3 +1,8 @@
+/**
+ * Ce fichier gère les routes des réservations (imbriquées sous catways).
+ * @module routes/reservations
+ */
+
 const express = require('express');
 const { body, param } = require('express-validator');
 const handleValidation = require('../middleware/validate');
@@ -5,6 +10,13 @@ const reservationsController = require('../controllers/reservationsController');
 
 const router = express.Router({ mergeParams: true });
 
+/**
+ * Ça valide le paramètre id du catway.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ * @returns {import('express').Response | void}
+ */
 router.use((req, res, next) => {
   const catwayNumber = Number(req.params.id);
   if (!Number.isInteger(catwayNumber) || catwayNumber < 1) {
@@ -68,3 +80,4 @@ router.delete(
 );
 
 module.exports = router;
+

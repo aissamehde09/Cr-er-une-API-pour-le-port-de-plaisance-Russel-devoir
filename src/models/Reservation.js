@@ -1,5 +1,20 @@
+/**
+ * Ce fichier définit le modèle Mongoose Reservation.
+ * @module models/Reservation
+ */
+
 const mongoose = require('mongoose');
 
+/**
+ * @typedef {Object} Reservation
+ * @property {number} catwayNumber
+ * @property {string} clientName
+ * @property {string} boatName
+ * @property {Date} startDate
+ * @property {Date} endDate
+ */
+
+/** @type {import('mongoose').Schema<Reservation>} */
 const reservationSchema = new mongoose.Schema(
   {
     catwayNumber: {
@@ -34,6 +49,10 @@ const reservationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+/**
+ * Ça vérifie que endDate est après startDate.
+ * @param {import('mongoose').CallbackWithoutResult} next
+ */
 reservationSchema.pre('validate', function validateDates(next) {
   if (this.startDate && this.endDate && this.endDate <= this.startDate) {
     this.invalidate('endDate', 'endDate must be after startDate');
@@ -49,3 +68,4 @@ reservationSchema.set('toJSON', {
 });
 
 module.exports = mongoose.model('Reservation', reservationSchema);
+

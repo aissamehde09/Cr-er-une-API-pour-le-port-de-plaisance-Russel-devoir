@@ -1,3 +1,8 @@
+/**
+ * Ici on gère l'UI des utilisateurs (mise à jour/suppression AJAX).
+ * @module public/users
+ */
+
 (() => {
   const table = document.querySelector('[data-users-table]');
   const emptyState = document.querySelector('[data-users-empty]');
@@ -8,6 +13,11 @@
     return;
   }
 
+  /**
+   * Ça échappe une valeur pour un sélecteur.
+   * @param {string} value
+   * @returns {string}
+   */
   const escapeValue = (value) => {
     if (window.CSS && typeof CSS.escape === 'function') {
       return CSS.escape(value);
@@ -15,11 +25,20 @@
     return value.replace(/"/g, '\\"');
   };
 
+  /**
+   * Ça cherche une ligne utilisateur par email.
+   * @param {string} email
+   * @returns {HTMLTableRowElement | null}
+   */
   const findRow = (email) => {
     const safeEmail = escapeValue(email);
     return document.querySelector(`[data-user-row="${safeEmail}"]`);
   };
 
+  /**
+   * Ça supprime une ligne utilisateur et bascule l'état vide.
+   * @param {string} email
+   */
   const removeRow = (email) => {
     const row = findRow(email);
     if (row) {
@@ -34,6 +53,12 @@
     }
   };
 
+  /**
+   * Ça met à jour les attributs DOM quand l'email utilisateur change.
+   * @param {HTMLTableRowElement} row
+   * @param {string} previousEmail
+   * @param {string} nextEmail
+   */
   const updateRowEmail = (row, previousEmail, nextEmail) => {
     row.setAttribute('data-user-row', nextEmail);
 
@@ -60,6 +85,10 @@
     }
   };
 
+  /**
+   * On branche le comportement de suppression à un formulaire utilisateur.
+   * @param {HTMLFormElement} form
+   */
   const handleDelete = (form) => {
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -110,6 +139,10 @@
     });
   };
 
+  /**
+   * On branche le comportement de mise à jour à un formulaire utilisateur.
+   * @param {HTMLFormElement} form
+   */
   const handleUpdate = (form) => {
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -222,3 +255,4 @@
     handleDelete(form);
   });
 })();
+

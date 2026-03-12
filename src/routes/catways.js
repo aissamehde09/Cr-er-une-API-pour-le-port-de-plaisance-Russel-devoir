@@ -1,3 +1,8 @@
+/**
+ * Ce fichier gère les routes catways (CRUD + réservations imbriquées).
+ * @module routes/catways
+ */
+
 const express = require('express');
 const { body, param } = require('express-validator');
 const Catway = require('../models/Catway');
@@ -7,6 +12,12 @@ const reservationRoutes = require('./reservations');
 
 const router = express.Router();
 
+/**
+ * Ça liste tous les catways.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<import('express').Response>}
+ */
 router.get('/', async (req, res) => {
   const catways = await Catway.find().sort({ catwayNumber: 1 });
   return res.json(catways);
@@ -16,6 +27,12 @@ router.get(
   '/:id',
   [param('id').isInt({ min: 1 }).withMessage('catwayNumber must be a positive integer')],
   handleValidation,
+  /**
+   * Ça récupère un catway par numéro.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const catwayNumber = Number(req.params.id);
     const catway = await Catway.findOne({ catwayNumber });
@@ -34,6 +51,12 @@ router.post(
     body('catwayState').trim().isLength({ min: 2, max: 500 }).withMessage('catwayState is required')
   ],
   handleValidation,
+  /**
+   * Ça crée un catway.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const { catwayNumber, catwayType, catwayState } = req.body;
 
@@ -59,6 +82,12 @@ router.put(
     body('catwayState').trim().isLength({ min: 2, max: 500 }).withMessage('catwayState is required')
   ],
   handleValidation,
+  /**
+   * Ça met à jour l'état d'un catway.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const catwayNumber = Number(req.params.id);
     const catway = await Catway.findOneAndUpdate(
@@ -79,6 +108,12 @@ router.delete(
   '/:id',
   [param('id').isInt({ min: 1 }).withMessage('catwayNumber must be a positive integer')],
   handleValidation,
+  /**
+   * Ça supprime un catway et ses réservations.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const catwayNumber = Number(req.params.id);
     const catway = await Catway.findOneAndDelete({ catwayNumber });
@@ -99,3 +134,4 @@ router.delete(
 router.use('/:id/reservations', reservationRoutes);
 
 module.exports = router;
+

@@ -1,3 +1,8 @@
+/**
+ * Ce fichier gère les routes utilisateurs (CRUD).
+ * @module routes/users
+ */
+
 const express = require('express');
 const { body, param } = require('express-validator');
 const User = require('../models/User');
@@ -5,6 +10,10 @@ const handleValidation = require('../middleware/validate');
 
 const router = express.Router();
 
+/**
+ * Petite règle express-validator pour le paramètre email.
+ * @type {import('express-validator').ValidationChain}
+ */
 const emailParamValidator = param('email').custom((value) => {
   const decoded = decodeURIComponent(value);
   const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -14,6 +23,12 @@ const emailParamValidator = param('email').custom((value) => {
   return true;
 });
 
+/**
+ * Ça liste tous les utilisateurs.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @returns {Promise<import('express').Response>}
+ */
 router.get('/', async (req, res) => {
   const users = await User.find().select('username email');
   return res.json(users);
@@ -23,6 +38,12 @@ router.get(
   '/:email',
   [emailParamValidator],
   handleValidation,
+  /**
+   * Ça récupère un utilisateur par email.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const email = decodeURIComponent(req.params.email).toLowerCase();
     const user = await User.findOne({ email }).select('username email');
@@ -41,6 +62,12 @@ router.post(
     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 chars')
   ],
   handleValidation,
+  /**
+   * Ça crée un utilisateur.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -64,6 +91,12 @@ router.put(
   '/:email',
   [emailParamValidator],
   handleValidation,
+  /**
+   * Ça met à jour un utilisateur par email.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const emailParam = decodeURIComponent(req.params.email).toLowerCase();
     const user = await User.findOne({ email: emailParam });
@@ -108,6 +141,12 @@ router.delete(
   '/:email',
   [emailParamValidator],
   handleValidation,
+  /**
+   * Ça supprime un utilisateur par email.
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<import('express').Response>}
+   */
   async (req, res) => {
     const email = decodeURIComponent(req.params.email).toLowerCase();
     const user = await User.findOneAndDelete({ email });
@@ -119,3 +158,4 @@ router.delete(
 );
 
 module.exports = router;
+

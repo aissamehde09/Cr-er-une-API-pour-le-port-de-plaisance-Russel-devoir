@@ -1,8 +1,17 @@
+/**
+ * Ce fichier aide pour la connexion MongoDB.
+ * @module config/db
+ */
+
 const mongoose = require('mongoose');
 
 const MONGO_URI = process.env.MONGO_URI;
 const MONGO_URI_STANDARD = process.env.MONGO_URI_STANDARD;
 
+/**
+ * Ça sert à se connecter à MongoDB Atlas via les variables d'environnement.
+ * @returns {Promise<void>}
+ */
 async function connectDb() {
   if (!MONGO_URI) {
     throw new Error('MONGO_URI is not set');
@@ -28,11 +37,21 @@ async function connectDb() {
     console.error('MongoDB connection error:', err.message);
   });
 
+  /**
+   * Ça sert à se connecter avec une URI spécifique.
+   * @param {string} uri
+   * @returns {Promise<void>}
+   */
   const connectWith = async (uri) => {
     await mongoose.connect(uri, { serverSelectionTimeoutMS: 10000 });
     console.log('MongoDB connected');
   };
 
+  /**
+   * Ça détecte les erreurs de résolution SRV/DNS.
+   * @param {Error} err
+   * @returns {boolean}
+   */
   const isSrvError = (err) =>
     err &&
     typeof err.message === 'string' &&
@@ -60,3 +79,5 @@ async function connectDb() {
 }
 
 module.exports = connectDb;
+
+

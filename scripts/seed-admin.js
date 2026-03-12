@@ -1,8 +1,17 @@
+/**
+ * Petit script pour initialiser l'admin.
+ * @module scripts/seed-admin
+ */
+
 require('dotenv').config();
 
 const connectDb = require('../src/config/db');
 const User = require('../src/models/User');
 
+/**
+ * Ça crée le compte admin s'il n'existe pas.
+ * @returns {Promise<void>}
+ */
 async function seedAdmin() {
   const username = process.env.ADMIN_USERNAME;
   const email = process.env.ADMIN_EMAIL;
@@ -35,3 +44,4 @@ seedAdmin().catch((err) => {
   console.error(err.message);
   process.exit(1);
 });
+

@@ -1,3 +1,8 @@
+/**
+ * Ici on gère l'UI des réservations (mise à jour/suppression AJAX).
+ * @module public/reservations
+ */
+
 (() => {
   const table = document.querySelector('[data-reservations-table]');
   const emptyState = document.querySelector('[data-reservations-empty]');
@@ -8,6 +13,11 @@
     return;
   }
 
+  /**
+   * Ça met la date au format YYYY-MM-DD.
+   * @param {string | Date} value
+   * @returns {string}
+   */
   const formatDate = (value) => {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) {
@@ -16,6 +26,10 @@
     return date.toISOString().slice(0, 10);
   };
 
+  /**
+   * Ça supprime une ligne de réservation et bascule l'état vide.
+   * @param {string} reservationId
+   */
   const removeRow = (reservationId) => {
     const row = document.querySelector(`[data-reservation-row="${reservationId}"]`);
     if (row) {
@@ -30,6 +44,10 @@
     }
   };
 
+  /**
+   * On branche le comportement de suppression à un formulaire réservation.
+   * @param {HTMLFormElement} form
+   */
   const handleDelete = (form) => {
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -80,6 +98,10 @@
     });
   };
 
+  /**
+   * On branche le comportement de mise à jour à un formulaire réservation.
+   * @param {HTMLFormElement} form
+   */
   const handleUpdate = (form) => {
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -202,3 +224,4 @@
     handleDelete(form);
   });
 })();
+
